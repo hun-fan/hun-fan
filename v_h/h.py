@@ -130,73 +130,76 @@ def register(dt):
             if time <= dt:
                 logging.warning(f'dt:{dt}')
                 break
-        while True:
-            try:
-                f.click_on('//button[text()="Перейти  к выбору времени"]')
-                break
-            except Exception as e:
-                sleep(0.1)
-        click_span = int(index)
-        dt = datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')
-        logging.warning(f'Нажали выбор даты:{dt} {index}слот{t}Hfan{user}')
-        if f.is_element_displayed('//span[text()="Свободно"]'):
-            count_span = len(driver.find_elements(By.XPATH, '//span[text()="Свободно"]'))
-            source = driver.page_source
-            if count_span < int(index):
-                click_span = count_span
-                logging.warning(f'меняем дату на слот {count_span} ')
-            for i in range(25):
-                try:
-                    f.click_on(f'(//span[text()="Свободно"])[{click_span}]')
-                    break
-                except Exception as e:
-                    logging.warning('click')
-                    sleep(0.1)
-            else:
-                raise RuntimeError("Не нажимается дата")
-            logging.warning(
-                f"Выбрали дату в {datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')}")
+
+            # жмем 2 раза
+        for i in range(2):
             while True:
                 try:
-                    f.click_on('//button[@id="nextTo3"]')
+                    f.click_on('//button[text()="Перейти  к выбору времени"]')
                     break
                 except Exception as e:
                     sleep(0.1)
-            logging.warning(
-                f"Нажали далее в {datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')}")
-            # telegram.send_message(f'{thread}: {datetime.now()}')
-            telegram.send_doc(f'В. Даты {name}, {index}слот{t}Hfan{user}', source)
-            sleep(90)
-            telegram.send_doc(f'В. Перед завершением бронирования {name} {index}слот{t}Hfan{user}', driver.page_source)
-            f.click_on_while('Завершение бронирования')
-            dt = datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'),
-                                   '%m/%d/%Y/%H/%M/%S.%f')
-            logging.warning(f'ЗАПИСАН:({name}): {dt}')
-            sleep(10)
-            telegram.send_doc(f'🟩В: в {dt} успешно зарегистрирован({name} {index}слот{t}Hfan{user})',
-                              driver.page_source)
-        else:
-            if f.is_element_displayed(
-                    '//div[text()="Обращаем Ваше внимание, что у Вас уже есть действующая запись для решения данного вопроса."]'):
-                telegram.send_doc(f'⭕В {name} уже зареген другим сеансом {index}слот{t}Hfan{user}',
+            click_span = int(index)
+            dt = datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')
+            logging.warning(f'Нажали выбор даты:{dt} {index}слот{t}Hfan{user}')
+            if f.is_element_displayed('//span[text()="Свободно"]'):
+                count_span = len(driver.find_elements(By.XPATH, '//span[text()="Свободно"]'))
+                source = driver.page_source
+                if count_span < int(index):
+                    click_span = count_span
+                    logging.warning(f'меняем дату на слот {count_span} ')
+                for i in range(25):
+                    try:
+                        f.click_on(f'(//span[text()="Свободно"])[{click_span}]')
+                        break
+                    except Exception as e:
+                        logging.warning('click')
+                        sleep(0.1)
+                else:
+                    raise RuntimeError("Не нажимается дата")
+                logging.warning(
+                    f"Выбрали дату в {datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')}")
+                while True:
+                    try:
+                        f.click_on('//button[@id="nextTo3"]')
+                        break
+                    except Exception as e:
+                        sleep(0.1)
+                logging.warning(
+                    f"Нажали далее в {datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')}")
+                # telegram.send_message(f'{thread}: {datetime.now()}')
+                telegram.send_doc(f'В. Даты {name}, {index}слот{t}Hfan{user}', source)
+                sleep(60)
+                telegram.send_doc(f'В. Перед завершением бронирования {name} {index}слот{t}Hfan{user}', driver.page_source)
+                f.click_on_while('Завершение бронирования')
+                dt = datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'),
+                                       '%m/%d/%Y/%H/%M/%S.%f')
+                logging.warning(f'ЗАПИСАН:({name}): {dt}')
+                sleep(10)
+                telegram.send_doc(f'🟩В: в {dt} успешно зарегистрирован({name} {index}слот{t}Hfan{user})',
                                   driver.page_source)
-                logging.warning('Уже зареген')
-                driver.close()
             else:
-                logging.warning(f'Нет дат: {index}слот{t}Hfan{user}')
-                sleep(3)
-                # telegram.send_doc(f'⭕В для:{name} нет дат {index}слот{t}Hfan{user}', driver.page_source)
-                telegram.send_image(driver, f'⭕В для:{name} нет дат {index}слот{t}Hfan{user}')
-                if f.is_element_displayed('//button[text()="Хорошо"]'):
-                    for i in range(20):
-                        try:
-                            f.click_on('//button[text()="Хорошо"]')
-                            break
-                        except Exception as e:
-                            logging.warning('click Хорошо для {name} нет дат {start_time_dict[key]} ')
-                            sleep(0.1)
-                    else:
-                        raise RuntimeError("Не нажимается хорошо")
+                if f.is_element_displayed(
+                        '//div[text()="Обращаем Ваше внимание, что у Вас уже есть действующая запись для решения данного вопроса."]'):
+                    telegram.send_doc(f'⭕В {name} уже зареген другим сеансом {index}слот{t}Hfan{user}',
+                                      driver.page_source)
+                    logging.warning('Уже зареген')
+                    driver.close()
+                else:
+                    logging.warning(f'Нет дат: {index}слот{t}Hfan{user}')
+                    # sleep(3)
+                    # telegram.send_doc(f'⭕В для:{name} нет дат {index}слот{t}Hfan{user}', driver.page_source)
+                    telegram.send_image(driver, f'⭕В для:{name} нет дат {index}слот{t}Hfan{user}')
+                    if f.is_element_displayed('//button[text()="Хорошо"]'):
+                        for i in range(10):
+                            try:
+                                f.click_on('//button[text()="Хорошо"]')
+                                break
+                            except Exception as e:
+                                logging.warning('click Хорошо для {name} нет дат {start_time_dict[key]} ')
+                                sleep(0.1)
+                        else:
+                            raise RuntimeError("Не нажимается хорошо")
     except Exception as e:
         try:
             telegram.send_image(driver, f'В неизвестная ошибка {str(e)} {index}слот{t}Hfan{user}')
