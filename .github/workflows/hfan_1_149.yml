@@ -1,4 +1,4 @@
-name: Hungary fan145-1
+name: Hungary fan149-1
 
 on:
   schedule:
@@ -35,4 +35,4 @@ jobs:
       - name: Test python
         run: |
           BASE_URL=${{ secrets.BASE_URL }}
-          python3 v_h/h.py ${{ matrix.tag }} "145" "1" "$BASE_URL"
+          python3 v_h/h.py ${{ matrix.tag }} "149" "1" "$BASE_URL"
