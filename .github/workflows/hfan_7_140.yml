@@ -2,7 +2,7 @@ name: Hungary fan140-7
 
 on:
   schedule:
-    - cron: '30 22 * * *'
+    - cron: '29 22 * * *'
 
 jobs:
   build:
