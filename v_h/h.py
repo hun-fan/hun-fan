@@ -51,8 +51,7 @@ def register(dt):
         logging.warning(ip_text)
         logging.warning(city_text)
         sleep(5)
-        telegram.send_doc(caption=f'{name}{index}слот{t}Hfan{user}Проверка айпи{ip_text}-{city_text}',
-                          html=driver.page_source)
+        telegram.send_doc(caption=f'{name}{index}слот{t}Hfan{user}Проверка айпи{ip_text}-{city_text}', html=driver.page_source)
 
         driver.delete_all_cookies()
         driver.get(sys.argv[4])
@@ -210,6 +209,7 @@ def register(dt):
                     if f.is_element_displayed('//button[text()="Хорошо"]'):
                         for i in range(10):
                             try:
+                                f.click_on('//div[contains(text(), "Сообщаем вам")]')
                                 f.click_on('//button[text()="Хорошо"]')
                                 break
                             except Exception as e:
