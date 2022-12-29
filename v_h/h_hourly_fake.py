@@ -39,7 +39,7 @@ def register(key):
     try:
         logging.warning(sys.argv[1])
         logging.warning(user)
-        start_time_dict = {'1': '00/56.1', '7': '00/58.5'}
+        start_time_dict = {'1': '59/56.1', '7': '59/58.5'}
 
         time = datetime.strptime(f'{datetime.now(tz=timezone.utc).strftime("%m/%d/%Y/%H")}/{start_time_dict[key]}',
                                  '%m/%d/%Y/%H/%M/%S.%f')
