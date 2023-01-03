@@ -172,7 +172,7 @@ def register(key):
         logging.warning(f'-{key}слотHourlyFake Нажали выбор даты:{dt}')
         if f.is_element_displayed('//span[text()="Свободно"]'):
             logging.warning(f'ЗАПИСАН:({name}): {dt}')
-            telegram.send_doc(f'В. Даты!!!Запускаем реального!! {name}-{key}слотHourlyFake, {start_time_dict[key]}', source)
+            telegram.send_doc(f'В. Даты!!!!!!!!!!!!!Запускаем реального!! {name}-{key}слотHourlyFake, {start_time_dict[key]}', source)
         else:
             if f.is_element_displayed(
                     '//div[text()="Обращаем Ваше внимание, что у Вас уже есть действующая запись для решения данного вопроса."]'):
