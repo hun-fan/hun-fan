@@ -171,7 +171,7 @@ def register(key):
         dt = datetime.strptime(datetime.now(tz=timezone.utc).strftime('%m/%d/%Y/%H/%M/%S.%f'), '%m/%d/%Y/%H/%M/%S.%f')
         logging.warning(f'-{key}слотHourlyFake Нажали выбор даты:{dt}')
         if f.is_element_displayed('//span[text()="Свободно"]'):
-            logging.warning(f'ЗАПИСАН:({name}): {dt}')
+            logging.warning(f'Даты:({name}): {dt}')
             telegram.send_doc(f'В. Даты!!!!!!!!!!!!!Запускаем реального!! {name}-{key}слотHourlyFake, {start_time_dict[key]}', source)
         else:
             if f.is_element_displayed(
